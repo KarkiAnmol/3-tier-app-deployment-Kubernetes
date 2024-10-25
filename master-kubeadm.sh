@@ -81,3 +81,20 @@ sudo apt-mark hold kubelet kubeadm kubectl
 sudo systemctl enable --now kubelet
 
 
+
+echo "Step 11: Now it's time to initialize our Cluster!((Only on master node))"
+echo "(Only on master node)"
+#1.31.2
+sudo kubeadm init --kubernetes-version=${KUBE_VERSION}
+echo "(To regenrate the tokens)"
+sudo kubeadm token create --print-join-command
+
+echo "Step 12:(Only on master node)"
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+echo "Step 14: Now deploy a pod network to the cluster"
+  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml --validate=false
