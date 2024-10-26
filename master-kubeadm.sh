@@ -21,7 +21,7 @@ echo \
 sudo apt-get update -y
 
 echo "To install the latest version, run:"
-sudo apt-get install docke  r-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 echo "Step 2: Create a file with the name containerd.conf using the command:"
 # create the file with root privileges using the vim editor
@@ -67,7 +67,7 @@ sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list   # helps tools such as c
 echo "Step 8: Disable Swap"
 sudo swapoff -a
 sudo sed -i '/ swap / s/^/#/' /etc/fstab  # This ensures swap remains off after a reboot
-
+export KUBE_VERSION=1.31.2
 
 echo "Step 9: Install Kubernetes:"
 sudo apt-get update -y
