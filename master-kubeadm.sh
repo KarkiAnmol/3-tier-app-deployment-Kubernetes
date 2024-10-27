@@ -67,7 +67,7 @@ sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list   # helps tools such as c
 echo "Step 8: Disable Swap"
 sudo swapoff -a
 sudo sed -i '/ swap / s/^/#/' /etc/fstab  # This ensures swap remains off after a reboot
-export KUBE_VERSION=1.31.2
+export KUBE_VERSION=1.31.1
 
 echo "Step 9: Install Kubernetes:"
 sudo apt-get update -y
@@ -98,3 +98,21 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 
 echo "Step 14: Now deploy a pod network to the cluster"
   kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml --validate=false
+
+echo "Step 11: Now it's time to initialize our Cluster!((Only on master node))"
+echo "(Only on master node)"
+#1.31.2
+sudo kubeadm init --kubernetes-version=${KUBE_VERSION}
+echo "(To regenrate the tokens)"
+sudo kubeadm token create --print-join-command
+
+echo "Step 12:(Only on master node)"
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+echo "Step 14: Now deploy a pod network to the cluster"
+  # kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml --validate=false
+  kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
